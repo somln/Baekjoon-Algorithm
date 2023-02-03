@@ -20,11 +20,9 @@ public class Main {
 			System.out.println(b-a-1);
 		}
 		
-		for(int i=a+1; i<b; i++) {
+		for(long i=a+1; i<b; i++) {
 			System.out.print(i + " ");
 		}
 		in.close();	
 	}
 }
-
-
