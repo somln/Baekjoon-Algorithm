@@ -5,8 +5,6 @@ import java.util.Stack;
 
 public class Main {
 	
-	private static final char L = 0;
-
 	public static void main(String[] args) throws NumberFormatException, IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
