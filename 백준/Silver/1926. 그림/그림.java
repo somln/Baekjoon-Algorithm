@@ -66,12 +66,15 @@ public class Main {
         		 nx = pair.x + dx[k];
         		 ny = pair.y + dy[k];
         		 
-        		 if(nx>=0 && ny>=0 && nx<n && ny<m &&!visited[nx][ny] && board[nx][ny]==1) {
+        		 if(nx<0 || ny<0 || nx>=n || ny>=m ) continue;
+        		 
+        		 if(!visited[nx][ny] && board[nx][ny]==1) {
+        	
         			 visited[nx][ny]= true;
         			 list.add(new Pair(nx, ny));
         			 
         		 }
-        		 		 
+        		 	 
         	 }
          }
         
