@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,15 +34,11 @@ public class Main {
         		board[i][j] = t.charAt(j);
         		if(t.charAt(j)=='J') {
         			jq.offer(new Pair(i,j));
-        			jd[i][j]=1;
+        			jd[i][j]=0;
         		}
         		else if(t.charAt(j)=='F') {
         			fq.offer(new Pair(i,j));
-        			fd[i][j]=1;
-        		}
-        		else if(t.charAt(j)=='.') {
-        			jd[i][j]=-1;
-        			fd[i][j]=-1;
+        			fd[i][j]=0;
         		}
         		
         	}
@@ -56,7 +53,7 @@ public class Main {
         		
         		if (nx < 0 || nx >= r || ny < 0 || ny >= c) continue;
             
-        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || fd[nx][ny]>=1) continue;
+        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || fd[nx][ny]>0) continue;
             
         		fd[nx][ny] = fd[fp.x][fp.y]+1;
         		fq.offer(new Pair(nx, ny));
@@ -71,13 +68,13 @@ public class Main {
         		int ny = jp.y + dy[k];
         		
         		if (nx < 0 || nx >= r || ny < 0 || ny >= c) {
-        			System.out.println(jd[jp.x][jp.y]);
+        			System.out.println(jd[jp.x][jp.y]+1);
         			return;
         		}
             
-        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || jd[nx][ny]>=1) continue;
+        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || jd[nx][ny]>0) continue;
         		
-        		if(fd[nx][ny] != -1 && jd[jp.x][jp.y]+1 >= fd[nx][ny]) continue;
+        		if( fd[nx][ny]>0 && jd[jp.x][jp.y]+1 >= fd[nx][ny]) continue;
             
         		jd[nx][ny] = jd[jp.x][jp.y]+1;
         		jq.offer(new Pair(nx, ny));
