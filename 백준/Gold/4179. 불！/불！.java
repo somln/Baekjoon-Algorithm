@@ -3,100 +3,99 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		int R,C;
-		String[][] miro;
-		int[][] dist1;
-		int[][] dist2;
-		Queue<int[]> fQ = new LinkedList<int[]>();
-		Queue<int[]> jQ = new LinkedList<int[]>();
-		int[] dx = {0,1,0,-1};
-		int[] dy = {1,0,-1,0};
-		
-		String miroSize = br.readLine();
-		R = Integer.parseInt(miroSize.split(" ")[0]);
-		C = Integer.parseInt(miroSize.split(" ")[1]);
-		
-		miro = new String[R][C];
-		dist1 = new int[R][C];
-		dist2 = new int[R][C];
-		
-		//데이터 입력
-		for (int i = 0; i < R; i++) {
-			String[] input = br.readLine().split("");
-			for (int j = 0; j < C; j++) {
-				miro[i][j] = input[j];
-				
-				if("J".equals(miro[i][j])) {
-					dist2[i][j] = 1;
-					jQ.add(new int[] {i,j});
-					
-				}
-				else if("F".equals(miro[i][j])) {
-					 dist1[i][j] = 1;
-					 fQ.add(new int[] {i,j});
-					 
-				}
-				else if(".".equals(miro[i][j])) {
-					dist1[i][j] = -1;
-					dist2[i][j] = -1;
-				}
-				
-			}
-		}
-		
-		//fire bfs
-		while (!fQ.isEmpty()) {
-			
-			int[] loc = fQ.poll();
-			
-			for (int i = 0; i < 4; i++) {
-				int nx = loc[0]+dx[i];
-				int ny = loc[1]+dy[i];
-				
-				// 범위를 벗어나면 pass
-				if(nx <0 || ny <0 || nx >= R || ny >= C) continue;	
-                // 벽이면 pass
-				if("#".equals(miro[nx][ny])) continue;
-                // 이미 지나간 곳은  pass
-				if(dist1[nx][ny] >= 1) continue;
-				
-				dist1[nx][ny] = dist1[loc[0]][loc[1]]+1;
-				fQ.add(new int[] {nx,ny});
-			}
-		}
-		
-		//Jihoon bfs
-		while (!jQ.isEmpty()) {
-			
-			int[] loc = jQ.poll();
-			
-			for (int i = 0; i < 4; i++) {
-				int nx = loc[0]+dx[i];
-				int ny = loc[1]+dy[i];
-				
-                // 범위를 벗어나면 탈출
-				if(nx <0 || ny <0 || nx >= R || ny >= C) {
-					System.out.println(dist2[loc[0]][loc[1]]);
-					return;
-				}
-                // 벽이면 pass
-				if("#".equals(miro[nx][ny])) continue;
-                // 이미 지나간 곳은  pass
-				if(dist2[nx][ny] >= 1) continue;
-                // 불이 지나간 자리이면서 && 불의 거리 보다 지훈이 거리가 크거나 같으면 pass
-				if(dist1[nx][ny] != -1 && dist2[loc[0]][loc[1]]+1 >= dist1[nx][ny] ) continue;
-				
-				dist2[nx][ny] = dist2[loc[0]][loc[1]]+1;
-				jQ.add(new int[] {nx,ny});
-			}
-		}
-        // 큐가 비어서 여기까지 오면 실패
-		System.out.println("IMPOSSIBLE");	
-	}
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        
+        int r = Integer.parseInt(st.nextToken());
+        int c = Integer.parseInt(st.nextToken());
+        
+        char [][] board = new char[r][c];
+        int [][] jd = new int[r][c];
+        int [][] fd = new int[r][c];
+        
+        Queue<Pair> jq = new LinkedList<>();
+        Queue<Pair> fq = new LinkedList<>();
+        
+        for(int i=0; i<r; i++) {
+        	String t = br.readLine();
+        	for(int j=0; j<c; j++) {
+        		board[i][j] = t.charAt(j);
+        		if(t.charAt(j)=='J') {
+        			jq.offer(new Pair(i,j));
+        			jd[i][j]=1;
+        		}
+        		else if(t.charAt(j)=='F') {
+        			fq.offer(new Pair(i,j));
+        			fd[i][j]=1;
+        		}
+        		else if(t.charAt(j)=='.') {
+        			jd[i][j]=-1;
+        			fd[i][j]=-1;
+        		}
+        		
+        	}
+        }
+        
+        while(!fq.isEmpty()) {
+        	Pair fp = fq.poll();
+        	
+        	for(int k=0; k<4; k++) {
+        		int nx = fp.x + dx[k];
+        		int ny = fp.y + dy[k];
+        		
+        		if (nx < 0 || nx >= r || ny < 0 || ny >= c) continue;
+            
+        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || fd[nx][ny]>=1) continue;
+            
+        		fd[nx][ny] = fd[fp.x][fp.y]+1;
+        		fq.offer(new Pair(nx, ny));
+        	}
+        }
+        
+        while(!jq.isEmpty()) {
+        	Pair jp = jq.poll();
+        	
+        	for(int k=0; k<4; k++) {
+        		int nx = jp.x + dx[k];
+        		int ny = jp.y + dy[k];
+        		
+        		if (nx < 0 || nx >= r || ny < 0 || ny >= c) {
+        			System.out.println(jd[jp.x][jp.y]);
+        			return;
+        		}
+            
+        		if (board[nx][ny]=='#' || board[nx][ny]=='F' || board[nx][ny]=='J' || jd[nx][ny]>=1) continue;
+        		
+        		if(fd[nx][ny] != -1 && jd[jp.x][jp.y]+1 >= fd[nx][ny]) continue;
+            
+        		jd[nx][ny] = jd[jp.x][jp.y]+1;
+        		jq.offer(new Pair(nx, ny));
+        	
+        	
+        	}
+        }
+        System.out.println("IMPOSSIBLE");
+        	
+  }
+
+    static class Pair {
+        int x;
+        int y;
+
+        Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }
