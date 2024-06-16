@@ -1,8 +1,6 @@
 class Solution {
     public int[] solution(int[] lottos, int[] win_nums) {
         
-        int answer[] = new int[2];
-        int rank[] = {6,6,5,4,3,2,1};
         int zero = 0, count = 0;
         
         for(int i : lottos){
@@ -15,9 +13,7 @@ class Solution {
             }
         }
         
-        answer[0] = rank[count+zero];
-        answer[1] = rank[count];
-        
+        int answer[] = {Math.min(6, 7-(count+zero)), Math.min(6, 7-(count))};
         return answer;
     }
 }
