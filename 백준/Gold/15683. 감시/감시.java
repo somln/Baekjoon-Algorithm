@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    static int[] dx = {1, 0, -1, 0}; // 남쪽, 동쪽, 북쪽, 서쪽 방향을 나타내는 배열
+    static int[] dx = {1, 0, -1, 0}; // 0: 동쪽, 1:북쪽, 2: 서쪽, 3:남쪽 
     static int[] dy = {0, 1, 0, -1}; 
     static int n, m;
     static int[][] board1 = new int[10][10]; // 최초 입력받은 board 저장용
@@ -49,25 +49,25 @@ public class Main {
             
             int brute = tmp;
             for (int i = 0; i < cctv.size(); i++) {
-                int dir = brute % 4;
+                int dir = brute % 4;     //dir: 동서남북 방향
                 brute /= 4;
                 int x = cctv.get(i)[0];
                 int y = cctv.get(i)[1];
                 
                 if (board1[x][y] == 1) {
-                    upd(x, y, dir);
-                } else if (board1[x][y] == 2) {
-                    upd(x, y, dir);
-                    upd(x, y, dir + 2);
+                    upd(x, y, dir);	//한 방향
+                } else if (board1[x][y] == 2 ) {
+                    upd(x, y, dir);       
+                    upd(x, y, dir + 2);   //위 방향과 반대 방향
                 } else if (board1[x][y] == 3) {
                     upd(x, y, dir);
-                    upd(x, y, dir + 1);
+                    upd(x, y, dir + 1);  //위 방향과 직각인 방향
                 } else if (board1[x][y] == 4) {
                     upd(x, y, dir);
                     upd(x, y, dir + 1);
                     upd(x, y, dir + 2);
-                } else { // board1[x][y] == 5
-                    upd(x, y, dir);
+                } else { // board1[x][y] == 5, 모든 방향
+                    upd(x, y, dir);       
                     upd(x, y, dir + 1);
                     upd(x, y, dir + 2);
                     upd(x, y, dir + 3);
