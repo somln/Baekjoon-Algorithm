@@ -1,47 +1,44 @@
-import java.io.*;
-import java.util.Scanner;
 import java.util.Stack;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        int num = Integer.parseInt(br.readLine());
-
-        if(num < 1 || num > 1000000)
-            return;
-
-        Stack<Character> stack = new Stack<>();
-        Stack<Character> stack2 = new Stack<>();
-
-        for(int i = 0; i < num; i++) {
-            String str = br.readLine();
-            for(int j = 0; j < str.length();j++) {
-                if(str.charAt(j) == '<') {
-                    if(!stack.isEmpty())
-                        stack2.push(stack.pop());
-                } else if(str.charAt(j) == '>') {
-                    if(!stack2.isEmpty())
-                        stack.push(stack2.pop());
-                } else if(str.charAt(j) == '-') {
-                    if(!stack.isEmpty())
-                        stack.pop();
-                } else {
-                    stack.push(str.charAt(j));
-                }
-            }
-            while(!stack2.isEmpty())
-                stack.push(stack2.pop());
-
-            StringBuffer sb = new StringBuffer();
-            while (!stack.isEmpty())
-                sb.append(stack.pop());
-
-            bw.write(sb.reverse() + "\n");
-        }
-        br.close();
-        bw.close();
-    }
+	
+	public static void main(String[] args) throws NumberFormatException, IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int n = Integer.parseInt(br.readLine());
+		
+		while(n-->0) {
+			
+			String s = br.readLine();
+			
+			Stack<Character> lf = new Stack<>();
+			Stack<Character> rt = new Stack<>();
+			
+			for(int i=0; i<s.length(); i++) {
+				char x = s.charAt(i);
+				switch(x) {
+				case '<': if(!lf.isEmpty()) rt.push(lf.pop());
+					break;
+				case '>': if(!rt.isEmpty()) lf.push(rt.pop());
+					break;
+				case '-': if(!lf.isEmpty()) lf.pop();
+					break; 
+				default: lf.push(x);	
+				}
+			}
+			
+			while(!lf.isEmpty()) {
+				rt.push(lf.pop());
+			}
+			
+			StringBuilder sb = new StringBuilder();
+		
+			while(!rt.isEmpty()) {
+				sb.append(rt.pop());
+			}
+			
+			System.out.println(sb);
+	    }
+	}
 }
