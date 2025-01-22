@@ -6,21 +6,30 @@ public class Main {
 
 		Scanner in = new Scanner(System.in);
 		
-		int N = in.nextInt();
-		int[] arr = new int[1000001];
+		int n=in.nextInt();
+		
+		int[] arr = new int[n];
 		int[] result = new int[2000001]; 
 		int cnt=0;
 		
-		for(int i=0; i<N; i++) {
+		for(int i=0; i<n; i++ ) {
 			arr[i] = in.nextInt();
 		}
 		
 		int x = in.nextInt();
 		
-		for(int i=0; i<N; i++) {
-			if(x-arr[i]>0&&result[x-arr[i]]==1) cnt++;
-			else result[arr[i]]=1;
+		
+		for(int a : arr) {
+			if(result[a]!=0) {
+				cnt++;
+			}
+			else {
+				if(x-a>0) {
+					result[x-a]++;
+				}
+			}
 		}
+
 		System.out.println(cnt);
 		
 		in.close();	
