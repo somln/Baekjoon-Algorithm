@@ -1,74 +1,61 @@
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
- 
+import java.io.*;
+import java.util.*;
+
 public class Main {
-	
-	static StringBuilder sb;
-    public static void main(String args[]) {
-    	
-        Scanner in = new Scanner(System.in);
-        sb = new StringBuilder();
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        LinkedList<Integer> dq = new LinkedList<Integer>();
+        StringBuilder sb = new StringBuilder();
 
-        int T = in.nextInt();
-        
-        while(T!=0) {
-        	
-           String s = in.next();
-           int n = in.nextInt();
+        int t = Integer.parseInt(br.readLine()); 
 
-           st = new StringTokenizer(in.next(), "[],");
-        
-           for(int i=0; i<n; i++){
-        	   dq.add(Integer.parseInt(st.nextToken()));
-          }
-           
-           ac(s,dq);
-           T--;
+        while (t-- > 0) {
+            String p = br.readLine(); 
+            int n = Integer.parseInt(br.readLine()); 
+            st = new StringTokenizer(br.readLine(), "[],"); 
+
+            LinkedList<Integer> list = new LinkedList<>(); 
+
+            for (int i = 0; i < n; i++) {
+                list.add(Integer.parseInt(st.nextToken()));
+            }
+
+            boolean isReversed = false; // 방향 플래그
+            boolean isError = false;   // 에러 발생 여부
+
+            for (char cmd : p.toCharArray()) {
+                if (cmd == 'R') {
+                    isReversed = !isReversed; // 방향 전환
+                } else if (cmd == 'D') {
+                    if (list.isEmpty()) {
+                        sb.append("error\n");
+                        isError = true;
+                        break;
+                    }
+                    if (isReversed) {
+                        list.removeLast(); 
+                    } else {
+                        list.removeFirst(); 
+                    }
+                }
+            }
+
+            if (isError) {
+                continue; // 에러 발생 시 다음 테스트 케이스로
+            }
+
+            sb.append('[');
+            while (!list.isEmpty()) {
+                if (isReversed) {
+                    sb.append(list.removeLast()); // 역방향 출력
+                } else {
+                    sb.append(list.removeFirst()); // 정방향 출력
+                }
+                if (!list.isEmpty()) sb.append(','); 
+            }
+            sb.append(']').append('\n');
         }
-        System.out.println(sb);
-        
+
+        System.out.print(sb); 
     }
-    
-    static void ac(String s, LinkedList<Integer> dq) {
-    	boolean direction=true;
-        for(char cmd : s.toCharArray()) {
-        	if(cmd=='R'){
-        		direction=!direction;
-        	}
-        	else if(cmd=='D') {
-        		if(dq.size()==0) {
-        			sb.append("error"+"\n"); 
-        			return;
-        		}
-        		else 
-        			if(direction) dq.pollFirst();
-        			else dq.pollLast();     		}
-        	}
-        
-    	sb.append('[');
-
-		if(dq.size() > 0) {
-			if(direction) {
-				sb.append(dq.pollFirst());
-
-				while(!dq.isEmpty()) {
-					sb.append(',').append(dq.pollFirst());
-				}
-			}
-			else {
-				sb.append(dq.pollLast());
-
-				while(!dq.isEmpty()) {
-					sb.append(',').append(dq.pollLast());
-				}
-			}
-		}
-
-		sb.append(']').append('\n');
-    }
- 
 }
- 
