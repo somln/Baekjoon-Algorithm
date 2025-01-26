@@ -30,29 +30,26 @@ public class Main {
 	
 	public static void func(int r, int c, int size) {
 		
-		if(check(r, c, size)) {
-			count[arr[r][c]+1]+=1;
-			return;
-		}
+		boolean check = true;
 		
-		//같은 수로 채워지지 않은 경우에는 9등분해서 다시 확인
-		int n = size/3;
-		for(int i=0; i<3; i++) {
-			for(int j=0; j<3; j++) {
-				func(r+n*i, c+n*j, n);
-			}
-		}
-	}
-	
-	//해당 종이 내부가 같은 수로 채워졌는지 확인
-	public static boolean check(int r, int c, int size) {
 		for(int i=r; i<r+size; i++) {
 			for(int j=c; j<c+size; j++) {
 				if(arr[r][c]!=arr[i][j]) {
-					return false;
+					check= false;
 				}
 			}
 		}
-		return true;
+		
+		if(check) {
+			count[arr[r][c]+1]++;
+			return;
+		}else {
+			int n = size/3;
+			for(int i=0; i<3; i++) {
+				for(int j=0; j<3; j++) {
+					func(r+n*i, c+n*j, n);
+				}
+			}
+		}
 	}
 }
