@@ -20,28 +20,28 @@ public class Main {
 		arr = new int[m];
 		func(0);
 		
-		System.out.print(sb.toString());
+		System.out.print(sb);
 	}
 
-   //func(k)는 현재 k개위치까지 수를 택한 상황에서 arr[k]를 정하는 함수
-	public static void func(int k) {
-		if (k == m) {
-			for (int i = 0; i < m; i++) {
-				sb.append(arr[i]).append(" ");
+   //func(i)는 현재 i개위치까지 수를 택한 상황에서 arr[i]를 정하는 함수
+	public static void func(int i) {
+		if(i==m){
+			for(int j=0; j<i; j++) {
+				sb.append(arr[j]).append(" ");
 			}
 			sb.append("\n");
 			return;
 		}
-
-		// k는 숫자 위치, i는 숫자		
-		for (int i = 1; i <= n; i++) {
-			if (!visited[i]) {
-				arr[k] = i;
-				visited[i] = true;
-				func(k + 1);
-				visited[i] = false;
+		
+		for(int k=1; k<=n; k++) {
+			if(!visited[k]) {
+				arr[i] = k;
+				visited[k] = true;
+				func(i+1);
+				visited[k] = false;
 			}
 		}
+		
 	}
 }
 
